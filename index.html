@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MAn/E Sintetizador</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Apple PWA (para que funcione como app en iPad) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MAn/E Synth">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Botón para colapsar controles izquierdos, fuera de .controls -->
+  <button id="collapseLeftButton" class="control-button collapse-button collapse-left">−</button>
+  
+  <div class="controls">
+    <div class="panel-section">
+      <div class="section-header">Dibujo <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <div class="draw-tools-grid">
+          <button class="draw-tool-btn active" data-tool="line">Línea</button>
+          <button class="draw-tool-btn" data-tool="freehand">Libre</button>
+          <button class="draw-tool-btn" data-tool="circle">Círculo</button>
+          <button class="draw-tool-btn" data-tool="square">Cuadrado</button>
+          <button class="draw-tool-btn" data-tool="triangle">Triángulo</button>
+          <button class="draw-tool-btn" data-tool="pentagon">Pentágono</button>
+        </div>
+        <button id="eraserButton" class="control-button">Borrador de LINEAS</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Audio <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <label for="whiteAudioFile" class="control-label">Archivo .WAV Teclas Blancas:</label>
+        <input type="file" id="whiteAudioFile" accept=".wav" class="control-input" />
+        <label for="blackAudioFile" class="control-label">Archivo .WAV Teclas Negras:</label>
+        <input type="file" id="blackAudioFile" accept=".wav" class="control-input" />
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Síntesis <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <label for="baseFrequency" class="control-label">Frecuencia Base (Hz):</label>
+        <input type="number" id="baseFrequency" value="440" min="220" max="880" step="1" class="control-input" />
+        <label for="octave" class="control-label">Octava:</label>
+        <input type="number" id="octave" value="4" min="1" max="8" step="1" class="control-input" />
+        <label for="waveform" class="control-label">Forma de Onda:</label>
+        <select id="waveform" class="control-select">
+          <option value="sine">Seno</option>
+          <option value="square">Cuadrada</option>
+          <option value="sawtooth">Sierra</option>
+          <option value="triangle">Triángulo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Volumen <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <label for="whiteVolume" class="control-label">Notas Blancas:</label>
+        <input type="range" id="whiteVolume" min="0" max="1" step="0.01" value="1" class="control-range" />
+        <label for="blackVolume" class="control-label">Notas Negras:</label>
+        <input type="range" id="blackVolume" min="0" max="1" step="0.01" value="1" class="control-range" />
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Hold <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <label for="whiteHoldToggle" class="control-label">Hold Teclas Blancas:</label>
+        <input type="checkbox" id="whiteHoldToggle" class="control-checkbox" />
+        <label for="blackHoldToggle" class="control-label">Hold Teclas Negras:</label>
+        <input type="checkbox" id="blackHoldToggle" class="control-checkbox" />
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Efectos / Grabar <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <button id="chromaVerbButton" class="control-button">MAn/E R-Verb</button>
+        <button id="recordButton" class="control-button">Grabar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="keyboard">
+    <canvas id="connectionCanvas"></canvas>
+    <svg id="drawingSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <!-- Botón para colapsar controles derechos, fuera de .right-panel -->
+  <button id="collapseRightButton" class="control-button collapse-button collapse-right">−</button>
+  
+  <div class="right-panel">
+    <div class="panel-section">
+      <div class="section-header">Líneas Dibujadas <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <div id="lineSelectionWindow" class="selection-window">
+          <ul id="lineList" class="line-list"></ul>
+          <div class="line-buttons-container">
+            <button id="deleteSelectedButton" class="line-button">Borrar Seleccionada</button>
+            <button id="deleteAllButton" class="line-button">Borrar Todas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Loops Grabados <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <div id="loopBankWindow" class="selection-window">
+          <ul id="loopList" class="loop-list"></ul>
+          <div class="loop-controls-container">
+            <button id="clearLoopsButton" class="loop-button">Borrar Todos</button>
+            <label for="loopVolume" class="control-label loop-label">Volumen Loops:</label>
+            <input type="range" id="loopVolume" min="0" max="1" step="0.01" value="1" class="control-range loop-range" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-header">Sesión <span class="section-toggle">−</span></div>
+      <div class="section-content">
+        <div class="session-buttons">
+          <button id="saveSessionButton" class="session-btn">Guardar .mane</button>
+          <button id="loadSessionButton" class="session-btn">Cargar .mane</button>
+          <input type="file" id="sessionFileInput" accept=".mane" style="display:none" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="speedPopup" class="speed-popup hidden">
+    <label class="speed-label">Velocidad Blancas</label>
+    <input type="range" id="whiteSpeedRange" min="0" max="5" step="0.1" value="1" class="speed-range" />
+    <span id="whiteSpeedValue" class="speed-value">1.0</span>
+    <label class="speed-label">Velocidad Negras</label>
+    <input type="range" id="blackSpeedRange" min="0" max="5" step="0.1" value="1" class="speed-range" />
+    <span id="blackSpeedValue" class="speed-value">1.0</span>
+  </div>
+
+  <div id="creditos">
+    MAn /E - Sintetizador Experimental - Creado por: WOLF G. T. - Marzo 2025
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,839 @@
+/* Variables CSS para ajustes globales */
+:root {
+  --control-width: 15vw;
+  --control-min-width: 150px;
+  --panel-width: 15vw;
+  --panel-min-width: 150px;
+  --panel-background: rgba(0, 0, 0, 0.0);
+  --panel-border: 0px solid #555;
+  --panel-border-radius: 0px;
+  --panel-padding: 1vh;
+  --panel-gap: 1vh;
+  --panel-top: 10vh;
+  --panel-right: 1vw;
+  --selection-background: rgba(0, 0, 0, 0.0);
+  --selection-padding: 1.5vh;
+  --selection-border: 0px solid #666;
+  --selection-border-radius: 8px;
+  --selection-shadow: 0px 0px rgba(0, 0, 0, 0);
+  --button-padding: 0.5vh 1vw;
+  --spacing: 0.5vh;
+  --border-radius: 4px;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --line-button-padding: 0.5vh 1vw;
+  --line-button-font-size: 0.9vw;
+  --line-button-min-font-size: 10px;
+  --line-button-background: #555;
+  --line-button-hover-background: #777;
+  --line-list-max-height: 20vh;
+  --loop-button-padding: 0.5vh 1vw;
+  --loop-button-font-size: 0.9vw;
+  --loop-button-min-font-size: 10px;
+  --loop-button-background: #555;
+  --loop-button-hover-background: #777;
+  --loop-list-max-height: 20vh;
+  --loop-label-margin-top: 1.5vh;
+  --loop-range-width: 60%;
+  --loop-range-margin-top: 0.5vh;
+}
+
+/* Estilos generales del cuerpo de la página */
+body {
+  margin: 0;
+  padding: 0;
+  background: #1a1a1a;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.5;
+  user-select: none;
+  cursor: none;
+}
+
+/* Contenedor de controles en la interfaz (izquierda) */
+.controls {
+  position: fixed;
+  top: 10vh;
+  left: 1vw;
+  background: rgba(0, 0, 0, 0);
+  padding: 1.5vh;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+  z-index: 1000;
+  width: var(--control-width);
+  min-width: var(--control-min-width);
+  border: 0px solid #555;
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+  font-family: inherit;
+  cursor: default;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Ajustes para pantallas pequeñas (controles izquierdos) */
+@media (max-height: 600px) or (max-width: 600px) {
+  .controls {
+    top: 5vh;
+    left: 0.5vw;
+    padding: 1vh;
+    width: 20vw;
+    min-width: 120px;
+    gap: 0.3vh;
+  }
+}
+
+/* Etiquetas de los controles */
+.control-label {
+  color: #fff;
+  font-size: 1vw;
+  min-font-size: 10px;
+  margin-bottom: var(--spacing);
+  font-weight: normal;
+  text-align: left;
+  text-transform: none;
+}
+
+/* Inputs y selectores de los controles */
+.control-input,
+.control-select,
+.control-range,
+.control-checkbox {
+  background: rgba(0, 0, 0, 0);
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: var(--border-radius);
+  padding: 0.5vh;
+  font-size: 1vw;
+  min-font-size: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+/* === Cambio añadido: Estilo específico para las opciones de Forma de Onda === */
+#waveform option {
+  background: #000; /* Fondo negro para las opciones del menú desplegable */
+  color: #fff; /* Texto blanco para contraste */
+}
+
+/* Estilo específico para el input de tipo archivo */
+.control-input[type="file"] {
+  padding: 0.2vh;
+  cursor: pointer;
+  opacity: 1;
+}
+
+/* Estilo para el control de rango (volumen) */
+.control-range {
+  width: 50%;
+  height: 0.5vh;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  outline: none;
+  border-radius: 2px;
+}
+
+/* Estilo para el thumb en navegadores Webkit (Chrome, Safari) */
+.control-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.2vh;
+  height: 1.2vh;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0.0);
+}
+
+/* Estilo para el thumb en Firefox */
+.control-range::-moz-range-thumb {
+  width: 1.2vh;
+  height: 1.2vh;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0.0);
+}
+
+/* Botón de control (base) */
+.control-button {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: var(--button-padding);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 1vw;
+  min-font-size: 10px;
+  font-weight: normal;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+/* Efecto hover para el botón base */
+.control-button:hover {
+  background: #777;
+  color: #fff;
+}
+
+/* Estilo para botón activo */
+.control-button.active {
+  background: #00cc00;
+}
+
+/* Estilos para los botones de colapsar */
+.collapse-button {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  background: #777;
+  border-radius: 50%;
+  z-index: 1100; /* Más alto que los contenedores para estar siempre visible */
+}
+
+/* Botón de colapsar izquierdo */
+.collapse-left {
+  top: 8vh; /* Ajustado para estar cerca de .controls */
+  left: 1vw;
+}
+
+/* Botón de colapsar derecho */
+.collapse-right {
+  top: 8vh; /* Ajustado para estar cerca de .right-panel */
+  right: 1vw;
+}
+
+/* Botón específico: Borrador de Líneas */
+#eraserButton {
+  background: grey;
+  margin-top: var(--spacing);
+}
+
+/* Hover para Borrador */
+#eraserButton:hover {
+  background: black;
+}
+
+/* Botón específico: ChromaVerb */
+#chromaVerbButton {
+  background: grey;
+  margin-top: var(--spacing);
+}
+
+/* Hover para ChromaVerb */
+#chromaVerbButton:hover {
+  background: black;
+}
+
+/* Activo para ChromaVerb */
+#chromaVerbButton.active {
+  background: #00cc00;
+}
+
+/* Botón específico: Grabar */
+#recordButton {
+  background: grey;
+  margin-top: var(--spacing);
+}
+
+/* Hover para Grabar */
+#recordButton:hover {
+  background: black;
+}
+
+/* Activo para Grabar */
+#recordButton.active {
+  background: #00cc00;
+}
+
+/* Contenedor del teclado */
+#keyboard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* Canvas para líneas de conexión */
+#connectionCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* SVG overlay para dibujos */
+#drawingSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Formas dibujadas en SVG */
+.drawing-shape {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 2;
+  opacity: 0.5;
+  pointer-events: auto;
+  cursor: none;
+}
+
+.drawing-shape.selected {
+  stroke: red;
+  stroke-width: 3;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px red);
+}
+
+/* Grid de herramientas de dibujo */
+.draw-tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-bottom: var(--spacing);
+}
+
+.draw-tool-btn {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: 0.4vh 0.2vw;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.8vw;
+  min-font-size: 9px;
+  text-align: center;
+  transition: background 0.3s;
+  box-shadow: var(--shadow);
+}
+
+.draw-tool-btn:hover {
+  background: #777;
+}
+
+.draw-tool-btn.active {
+  background: #00cc00;
+}
+
+/* Estilo base para las teclas */
+.key {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: normal;
+  cursor: none;
+  user-select: none;
+  transition: transform 0.1s;
+  font-family: inherit;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
+
+/* Estilo para teclas blancas */
+.key.white {
+  background: #fff;
+  color: #000;
+  border: 2px solid #ccc;
+  border-style: solid;
+  border-width: 2px;
+}
+
+/* Estilo para teclas negras */
+.key.black {
+  background: #000;
+  color: #fff;
+  border: 2px solid #333;
+  border-style: solid;
+  border-width: 2px;
+}
+
+/* Estilo para la tecla especial 'wolf-key' */
+.key.wolf-key {
+  width: 80px;
+  height: 80px;
+  background: grey;
+  color: white;
+  border: 2px solid black;
+  font-size: 24px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Estilo para teclas presionadas */
+.key.pressed {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  transition: all 0.1s;
+}
+
+/* Líneas de conexión entre teclas */
+.connection-line {
+  position: absolute;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.8);
+  transform-origin: 0 0;
+  opacity: 0.2;
+  border: none;
+}
+
+/* Líneas dibujadas por el usuario */
+.drawing-line {
+  position: absolute;
+  height: 2px;
+  background: white;
+  transform-origin: 0 0;
+  cursor: pointer;
+  opacity: 0.5;
+  box-shadow: 0 0 0px #00ff00;
+}
+
+/* Líneas seleccionadas */
+.drawing-line.selected {
+  background: red;
+  height: 3px;
+  box-shadow: 0 0 8px red;
+}
+
+/* Contenedor del panel derecho */
+.right-panel {
+  position: fixed;
+  top: var(--panel-top);
+  right: var(--panel-right);
+  display: flex;
+  flex-direction: column;
+  gap: var(--panel-gap);
+  z-index: 1000;
+  width: var(--panel-width);
+  min-width: var(--panel-min-width);
+  padding: var(--panel-padding);
+  background: var(--panel-background);
+  border: var(--panel-border);
+  border-radius: var(--panel-border-radius);
+  box-shadow: none;
+  cursor: default;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Clase para estado colapsado */
+.collapsed {
+  opacity: 0;
+  transform: translateY(-10px); /* Pequeño desplazamiento para efecto visual */
+  pointer-events: none; /* Evita interacciones cuando está colapsado */
+}
+
+/* Ventana de selección de líneas */
+#lineSelectionWindow {
+  position: relative;
+  top: 0;
+  right: 0;
+  background: var(--selection-background);
+  padding: var(--selection-padding);
+  border-radius: var(--selection-border-radius);
+  color: #fff;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border: var(--selection-border);
+  box-shadow: var(--selection-shadow);
+  font-family: inherit;
+}
+
+/* Lista de líneas dibujadas */
+.line-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1vh 0;
+  font-size: 1vw;
+  min-font-size: 10px;
+  max-height: var(--line-list-max-height);
+  overflow-y: auto;
+}
+
+/* Elementos de la lista de líneas */
+.line-list li {
+  padding: 0.5vh;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Efecto hover para los elementos de la lista de líneas */
+.line-list li:hover {
+  background: #444;
+  color: #fff;
+}
+
+/* Contenedor de botones en ventana de líneas */
+.line-buttons-container {
+  display: flex;
+  gap: var(--spacing);
+  margin-top: var(--spacing);
+}
+
+/* Botones de líneas */
+.line-button {
+  background: var(--line-button-background);
+  color: #fff;
+  border: none;
+  padding: var(--line-button-padding);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--line-button-font-size);
+  min-font-size: var(--line-button-min-font-size);
+  transition: background 0.3s;
+}
+
+/* Hover para los botones de líneas */
+.line-button:hover {
+  background: var(--line-button-hover-background);
+}
+
+/* Ventana de loops grabados */
+#loopBankWindow {
+  position: relative;
+  top: 0;
+  right: 0;
+  background: var(--selection-background);
+  padding: var(--selection-padding);
+  border-radius: var(--selection-border-radius);
+  color: #fff;
+  display: block;
+  width: 80%;
+  box-sizing: border-box;
+  border: var(--selection-border);
+  box-shadow: var(--selection-shadow);
+  font-family: inherit;
+}
+
+/* Lista de loops */
+.loop-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1vh 0;
+  font-size: 1vw;
+  min-font-size: 10px;
+  max-height: var(--loop-list-max-height);
+  overflow-y: auto;
+}
+
+/* Elementos de la lista de loops */
+.loop-list li {
+  padding: 0.5vh;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loop-label-text {
+  flex: 1;
+}
+
+.loop-export-btn {
+  background: none;
+  border: 1px solid #666;
+  color: #aaa;
+  font-size: 11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.loop-export-btn:hover {
+  background: #555;
+  color: #fff;
+  border-color: #999;
+}
+
+/* Efecto hover para los elementos de la lista de loops */
+.loop-list li:hover {
+  background: #444;
+  color: #fff;
+}
+
+/* Contenedor de botones y volumen en ventana de loops */
+.loop-controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+  margin-top: var(--spacing);
+}
+
+/* Botón de loops */
+.loop-button {
+  background: var(--loop-button-background);
+  color: #fff;
+  border: none;
+  padding: var(--loop-button-padding);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--loop-button-font-size);
+  min-font-size: var(--loop-button-min-font-size);
+  transition: background 0.3s;
+}
+
+/* Hover para el botón de loops */
+.loop-button:hover {
+  background: var(--loop-button-hover-background);
+}
+
+/* Etiqueta de volumen en ventana de loops */
+.loop-label {
+  margin-top: var(--loop-label-margin-top);
+  font-size: 1vw;
+  min-font-size: 10px;
+}
+
+/* Control de rango en ventana de loops */
+.loop-range {
+  width: var(--loop-range-width);
+  margin-top: var(--loop-range-margin-top);
+}
+
+/* Ajustes para pantallas pequeñas (panel derecho) */
+@media (max-height: 600px) or (max-width: 600px) {
+  .right-panel {
+    top: 5vh;
+    right: 0.5vw;
+    width: 20vw;
+    min-width: 120px;
+    gap: 0.5vh;
+    padding: 0.5vh;
+  }
+  #lineSelectionWindow {
+    padding: 1vh;
+    border-radius: 6px;
+  }
+  #loopBankWindow {
+    padding: 1vh;
+    border-radius: 6px;
+  }
+  .collapse-left {
+    top: 4vh;
+    left: 0.5vw;
+  }
+  .collapse-right {
+    top: 4vh;
+    right: 0.5vw;
+  }
+}
+
+/* Título de las ventanas de selección */
+.selection-window h3 {
+  margin: 0 0 1vh 0;
+  font-size: 1.2vw;
+  min-font-size: 12px;
+  font-weight: normal;
+  text-align: left;
+  color: #fff;
+  text-transform: lowercase;
+}
+
+/* Secciones colapsables en paneles */
+.panel-section {
+  margin-bottom: 2px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4vh 0.5vw;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.9vw;
+  min-font-size: 10px;
+  color: #ccc;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.section-header:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.section-toggle {
+  font-size: 0.8vw;
+  min-font-size: 10px;
+  color: #888;
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+  padding: 0.4vh 0;
+  overflow: hidden;
+  max-height: 500px;
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  opacity: 1;
+}
+
+.section-content.section-collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+}
+
+/* Botones de sesión */
+.session-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.session-btn {
+  background: #444;
+  color: #ccc;
+  border: 1px solid #666;
+  padding: 0.5vh 0.5vw;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.85vw;
+  min-font-size: 9px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.session-btn:hover {
+  background: #555;
+  color: #fff;
+  border-color: #999;
+}
+
+/* Popup de velocidad del Wolf Key */
+.speed-popup {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 12px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.speed-popup.hidden {
+  display: none;
+}
+
+.speed-label {
+  color: #fff;
+  font-size: 12px;
+  margin: 0;
+}
+
+.speed-range {
+  width: 100%;
+  height: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #444;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+}
+
+.speed-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.speed-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.speed-value {
+  color: #aaa;
+  font-size: 11px;
+  text-align: right;
+}
+
+/* Cursor personalizado */
+.custom-cursor {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  opacity: 1;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+/* Texto de créditos */
+#creditos {
+  position: fixed;
+  bottom: 5vh;
+  left: 2vw;
+  color: #888;
+  font-size: 1vw;
+  min-font-size: 10px;
+  z-index: 1000;
+  font-family: inherit;
+  font-weight: normal;
+  text-align: left;
+  opacity: 0.8;
+}
+
+/* Ajustes para pantallas pequeñas (créditos) */
+@media (max-height: 600px) or (max-width: 600px) {
+  #creditos {
+    bottom: 2vh;
+    left: 1vw;
+    font-size: 0.8vw;
+    min-font-size: 8px;
+  }
+}
