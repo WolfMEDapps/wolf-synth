@@ -1,3 +1,46 @@
+// === Touch → Mouse (soporte iPad/móvil) ===
+// Traduce eventos touch a mouse para que todo el código existente funcione sin cambios.
+(function() {
+  let currentTarget = null;
+
+  function touchToMouse(touchEvent, mouseType) {
+    const touch = touchEvent.changedTouches[0];
+    const target = mouseType === 'mousedown'
+      ? document.elementFromPoint(touch.clientX, touch.clientY) || touch.target
+      : currentTarget || touch.target;
+
+    if (mouseType === 'mousedown') currentTarget = target;
+    if (mouseType === 'mouseup') {
+      // Disparar mouseleave también (para que las notas se detengan)
+      const leaveEvent = new MouseEvent('mouseleave', {
+        bubbles: false, cancelable: true, view: window,
+        clientX: touch.clientX, clientY: touch.clientY
+      });
+      currentTarget && currentTarget.dispatchEvent(leaveEvent);
+      currentTarget = null;
+    }
+
+    const mouseEvent = new MouseEvent(mouseType, {
+      bubbles: true, cancelable: true, view: window,
+      clientX: touch.clientX, clientY: touch.clientY,
+      screenX: touch.screenX, screenY: touch.screenY,
+      button: 0, buttons: mouseType === 'mouseup' ? 0 : 1
+    });
+    target.dispatchEvent(mouseEvent);
+    touchEvent.preventDefault();
+  }
+
+  document.addEventListener('touchstart', (e) => touchToMouse(e, 'mousedown'), { passive: false });
+  document.addEventListener('touchmove', (e) => touchToMouse(e, 'mousemove'), { passive: false });
+  document.addEventListener('touchend', (e) => touchToMouse(e, 'mouseup'), { passive: false });
+  document.addEventListener('touchcancel', (e) => touchToMouse(e, 'mouseup'), { passive: false });
+
+  // Ocultar cursor personalizado en dispositivos táctiles
+  if ('ontouchstart' in window) {
+    document.documentElement.classList.add('touch-device');
+  }
+})();
+
 let audioContext;
 let whiteAudioBuffer;
 let blackAudioBuffer;

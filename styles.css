@@ -837,3 +837,26 @@ body {
     min-font-size: 8px;
   }
 }
+/* === Soporte táctil (iPad/móvil) === */
+.touch-device .custom-cursor {
+  display: none !important;
+}
+
+.touch-device * {
+  cursor: default !important;
+}
+
+/* Evitar zoom accidental y selección de texto en iPad */
+.touch-device body {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Permitir selección en controles de input */
+.touch-device input,
+.touch-device select {
+  -webkit-user-select: auto;
+  user-select: auto;
+  touch-action: auto;
+}
