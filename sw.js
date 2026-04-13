@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mane-synth-v2';
+const CACHE_NAME = 'mane-synth-v3';
 const ASSETS = [
   './',
   './index.html',

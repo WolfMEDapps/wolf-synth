@@ -1,7 +1,21 @@
 // === Touch → Mouse (soporte iPad/móvil) ===
-// Traduce eventos touch a mouse para que todo el código existente funcione sin cambios.
+// Traduce eventos touch a mouse SOLO en el área del teclado/dibujo.
+// Los controles nativos (botones, sliders, selects) funcionan con touch normal.
 (function() {
   let currentTarget = null;
+  let isSyntheticTouch = false;
+
+  // Elementos que deben usar su comportamiento touch nativo
+  function isNativeControl(el) {
+    if (!el) return true;
+    const tag = el.tagName;
+    if (tag === 'BUTTON' || tag === 'INPUT' || tag === 'SELECT' ||
+        tag === 'LABEL' || tag === 'OPTION' || tag === 'TEXTAREA') return true;
+    if (el.closest('.controls') || el.closest('.right-panel') ||
+        el.closest('#speedPopup') || el.closest('#creditos')) return true;
+    if (el.id === 'collapseLeftButton' || el.id === 'collapseRightButton') return true;
+    return false;
+  }
 
   function touchToMouse(touchEvent, mouseType) {
     const touch = touchEvent.changedTouches[0];
@@ -9,15 +23,25 @@
       ? document.elementFromPoint(touch.clientX, touch.clientY) || touch.target
       : currentTarget || touch.target;
 
-    if (mouseType === 'mousedown') currentTarget = target;
+    // Si es un control nativo, dejar que el touch funcione normalmente
+    if (mouseType === 'mousedown' && isNativeControl(target)) {
+      isSyntheticTouch = false;
+      return; // No interceptar
+    }
+    if (!isSyntheticTouch && mouseType !== 'mousedown') return;
+
+    if (mouseType === 'mousedown') {
+      currentTarget = target;
+      isSyntheticTouch = true;
+    }
     if (mouseType === 'mouseup') {
-      // Disparar mouseleave también (para que las notas se detengan)
       const leaveEvent = new MouseEvent('mouseleave', {
         bubbles: false, cancelable: true, view: window,
         clientX: touch.clientX, clientY: touch.clientY
       });
       currentTarget && currentTarget.dispatchEvent(leaveEvent);
       currentTarget = null;
+      isSyntheticTouch = false;
     }
 
     const mouseEvent = new MouseEvent(mouseType, {
