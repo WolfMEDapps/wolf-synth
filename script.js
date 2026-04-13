@@ -1137,6 +1137,7 @@ function exportLoopAsWav(index) {
 
 // Reproducir un loop
 function playLoop(index) {
+  if (audioContext.state === 'suspended') audioContext.resume();
   const buffer = loops[index];
   if (!buffer) {
     console.error(`No hay buffer para Loop ${index + 1}`);
@@ -1185,6 +1186,7 @@ function playLoop(index) {
 
 // Detener un loop
 function stopLoop(index) {
+  if (audioContext.state === 'suspended') audioContext.resume();
   if (activeLoops[index]) {
     const { source, gainNode } = activeLoops[index];
     const now = audioContext.currentTime;
